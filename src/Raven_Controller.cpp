@@ -938,7 +938,7 @@ switch (feature)
 		green_arm_loc = mc[biggest_ind];
 		break;
 	case 0:
-		object_loc - mc[biggest_ind];
+		object_loc = mc[biggest_ind];
 		break;
 }
 
