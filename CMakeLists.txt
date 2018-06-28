@@ -21,7 +21,7 @@ include_directories(include ${catkin_INCLUDE_DIRS}
 ${OpenCV_INCLUDE_DIRS})
 
 add_executable(follower src/talker.cpp  src/Raven_Controller.cpp src/Raven_PathPlanner.cpp)
-target_link_libraries(follower ${catkin_LIBRARIES})
+target_link_libraries(follower ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_dependencies(follower AutoCircle_test_generate_messages_cpp)
 
 add_executable(listenerfollower src/listener.cpp)

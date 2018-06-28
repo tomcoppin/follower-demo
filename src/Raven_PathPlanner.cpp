@@ -453,29 +453,32 @@ tfScalar Raven_PathPlanner::get_K()
 */
 void Raven_PathPlanner::show_PathState()
 {
-	if(ArmType == LEFT_ARM)
-	{
-		if(PathState == MOVETO_CIRCLE)
-  			cout<<"\tPathState[LEFT] = MOVETO_CIRCLE"<<endl;
-
-		else if(PathState == AROUND_CIRCLE)
-			cout<<"\tPathState[LEFT]  = AROUND_CIRCLE"<<endl;
+	//if(ArmType == LEFT_ARM)
+	//{
+		if(PathState2 == RIGHT)
+  			cout<<"\tPathState2 = RIGHT"<<endl;
+		else if(PathState2 == LEFT)
+			cout<<"\tPathState2  = LEFT"<<endl;
+		else if(PathState2 == STOP2)
+			cout<<"\tPathState2  = STOP"<<endl;
 		else
-			cout<<"\tPathState[LEFT]  = undefined!"<<endl;
-	}
-	else if(ArmType == RIGHT_ARM)
-	{
+			cout<<"\tPathState2  = undefined!"<<endl;
+	//}
+	//else if(ArmType == RIGHT_ARM)
+	//{
 		if(PathState1 == UP)
-  			cout<<"\tPathState1[RIGHT] = UP"<<endl;
+  			cout<<"\tPathState1 = UP"<<endl;
 
 		else if(PathState1 == DOWN)
-			cout<<"\tPathState1[RIGHT]  = DOWN"<<endl;
+			cout<<"\tPathState1  = DOWN"<<endl;
 
 		else if(PathState1 == STOP1)
-			cout<<"\tPathState1[RIGHT]  = STOP"<<endl;
+			cout<<"\tPathState1  = STOP"<<endl;
 		else
-			cout<<"\tPathState[RIGHT]  = undefined!"<<endl;
-	}
+			cout<<"\tPathState1  = undefined!"<<endl;
+
+		
+	//}
 	
 }
 
@@ -1056,13 +1059,13 @@ tf::Vector3 Raven_PathPlanner::FollowMotion()
 	switch(PathState1)
 	{
 		case UP:
-			del_Vector.setY(Speed);
+			del_Vector.setX(Speed);
 		break;
 		case DOWN:
-			del_Vector.setY(-Speed);
+			del_Vector.setX(-Speed);
 		break;
 		case STOP1:
-			del_Vector.setY(0);
+			del_Vector.setX(0);
 		break;
 	}
 
@@ -1075,7 +1078,7 @@ tf::Vector3 Raven_PathPlanner::FollowMotion()
 			del_Vector.setZ(-Speed);
 		break;
 		case STOP2:
-			del_Vector.setY(0);
+			del_Vector.setZ(0);
 		break;
 	}
 

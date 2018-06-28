@@ -1,5 +1,8 @@
 #include "Raven_Controller.h"
 
+static const std::string OPENCV_WINDOW = "Image window";
+
+
 
 /**
 *	\fn Raven_Controller()
@@ -15,6 +18,10 @@ Raven_Controller::Raven_Controller() : it_(nh_)
 
 }
 
+// Raven_Controller::~Raven_Controller()
+// {
+// 	cv::destroyWindow(OPENCV_WINDOW);
+// }
 
 
 
@@ -748,6 +755,10 @@ void Raven_Controller::output_PATHinfo()
 
 	//LEFT_PATH.show_PathState();
 	RIGHT_PATH.show_PathState(); 	//(RIGHT_ARM unused right now)
+
+	cout<<"arm_loc = "<<green_arm_loc.x<<", "<<green_arm_loc.y<<endl;
+	cout<<"object_loc = "<<object_loc.x<<", "<<object_loc.y<<endl;
+
 	cout<<endl<<endl;
 		
 }
@@ -935,11 +946,27 @@ for( int i = 0; i < contours.size(); i++ )
 switch (feature)
 {
 	case 1:
+	{
 		green_arm_loc = mc[biggest_ind];
+		// // Draw largest contour
+		// Mat drawing = Mat::zeros( threshold_output.size(), CV_8UC3 );
+		// Scalar color = Scalar( 0,255,0 ); //green
+		// drawContours( drawing, contours, biggest_ind, color, 2, 8, hierarchy, 0, Point() );
+		// circle( drawing, mc[biggest_ind], 4, color, -1, 8, 0 ); 
+
+		// // Update GUI Window
+		// cv::imshow(OPENCV_WINDOW, drawing);
+		// cv::waitKey(3);
+
+		// //Output modified video stream
+		// image_pub_.publish(cv_ptr->toImageMsg());
 		break;
+	}	
 	case 0:
+	{
 		object_loc = mc[biggest_ind];
 		break;
+	}
 }
 
 return;
@@ -952,20 +979,23 @@ void Raven_Controller::imageCb(const sensor_msgs::ImageConstPtr& msg)
 	extract_loc(50,65,1,msg);
 	extract_loc(2,12,0,msg);
 	desired_loc = object_loc;
-	desired_loc.x -= 50;
+	desired_loc.x -= 0;
 	desired_loc.y -= 50;
 
-	if (green_arm_loc.x - desired_loc.x > 5)
-		{RIGHT_PATH.PathState2 = RIGHT;}
-	else if (green_arm_loc.x - desired_loc.x < -5)
+	if (green_arm_loc.x - desired_loc.x > 20)
 		{RIGHT_PATH.PathState2 = LEFT;}
+	else if (green_arm_loc.x - desired_loc.x < -20)
+		{RIGHT_PATH.PathState2 = RIGHT;}
 	else {RIGHT_PATH.PathState2 = STOP2;}
 
-	if (green_arm_loc.y - desired_loc.y > 5)
-		{RIGHT_PATH.PathState1 = DOWN;}
-	else if (green_arm_loc.x - desired_loc.x < -5)
+	if (green_arm_loc.y - desired_loc.y > 20)
 		{RIGHT_PATH.PathState1 = UP;}
+	else if (green_arm_loc.y - desired_loc.y < -20)
+		{RIGHT_PATH.PathState1 = DOWN;}
 	else {RIGHT_PATH.PathState1 = STOP1;}
+
+	// RIGHT_PATH.PathState1 = STOP1;
+	// RIGHT_PATH.PathState2 = STOP2;
 
 	//cout<<"image callback"<<endl;
 }
